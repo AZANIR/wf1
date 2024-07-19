@@ -28,8 +28,8 @@ jobs:
       - name: Trigger Workflow in Another Repository
         run: |
           # Set the required variables
-          repo_owner="AZANIR"
-          repo_name="wf2"
+          repo_owner="ballerine-io"
+          repo_name="e2e-tests"
           event_type="trigger-workflow"
           environment_version="${{ github.event.inputs.environment_version }}"
           customer_company="${{ github.event.inputs.customer_company }}"
