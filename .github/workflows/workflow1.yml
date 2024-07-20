@@ -15,6 +15,7 @@ on:
         description: 'Choose customer company (e.g., CLIPSPAY, OXPAY, FIDO)'
         required: true
         type: choice
+        default: 'CLIPSPAY'
         options:
           - CLIPSPAY
           - OXPAY
@@ -34,10 +35,10 @@ jobs:
         run: |
           if [[ "${GITHUB_REF##*/}" == "dev" ]]; then
             echo "environment_version=dev" >> $GITHUB_ENV
-            echo "customer_company=OXPAY" >> $GITHUB_ENV # Change this to the default company for dev branch
+            echo "customer_company=CLIPSPAY" >> $GITHUB_ENV # Change this to the default company for dev branch
           elif [[ "${GITHUB_REF##*/}" == "sb" ]]; then
             echo "environment_version=sb" >> $GITHUB_ENV
-            echo "customer_company=CLIPSPAY" >> $GITHUB_ENV # Change this to the default company for sb branch
+            echo "customer_company=FIDO" >> $GITHUB_ENV # Change this to the default company for sb branch
           fi
 
       - name: Trigger Workflow in Another Repository
