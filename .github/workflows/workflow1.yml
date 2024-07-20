@@ -19,20 +19,35 @@ on:
           - CLIPSPAY
           - OXPAY
           - FIDO
+  push:
+    branches:
+      - dev
+      - sb
 
 jobs:
   trigger:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Set environment and customer company based on push branch
+        if: github.event_name == 'push'
+        run: |
+          if [[ "${GITHUB_REF##*/}" == "dev" ]]; then
+            echo "environment_version=dev" >> $GITHUB_ENV
+            echo "customer_company=OXPAY" >> $GITHUB_ENV # Change this to the default company for dev branch
+          elif [[ "${GITHUB_REF##*/}" == "sb" ]]; then
+            echo "environment_version=sb" >> $GITHUB_ENV
+            echo "customer_company=CLIPSPAY" >> $GITHUB_ENV # Change this to the default company for sb branch
+          fi
+
       - name: Trigger Workflow in Another Repository
         run: |
           # Set the required variables
           repo_owner="ballerine-io"
           repo_name="e2e-tests"
           event_type="trigger-workflow"
-          environment_version="${{ github.event.inputs.environment_version }}"
-          customer_company="${{ github.event.inputs.customer_company }}"
+          environment_version="${{ github.event.inputs.environment_version || env.environment_version }}"
+          customer_company="${{ github.event.inputs.customer_company || env.customer_company }}"
 
           curl -L \
             -X POST \
